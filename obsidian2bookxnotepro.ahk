@@ -203,18 +203,22 @@ SendLink2Obsidian(markdown_link) {
     A_Clipboard := ""
     A_Clipboard := markdown_link
     ClipWait 2, 0
+    delay := app_config.DelayNote
     if (app_config.IsMarkmindRich){
         MouseMove2obsidian()
         Send "{LCtrl down}"
         Send "{v down}"
         Send "{v up}"
         Send "{LCtrl up}"
+        ;给osbdiain一点反应时间
+        Sleep  delay
         MouseMove2Bookxnote()
     }else{
         Send "{LCtrl down}"
         Send "{v down}"
         Send "{v up}"
         Send "{LCtrl up}"
+        Sleep delay
     }
     
 }

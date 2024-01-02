@@ -69,6 +69,10 @@ hotkey_bookxnote_hightline.OnEvent("Change", (*) => app_config.HotkeyBookxnoteHi
 Button_sync_image_to_obsidian := myGui.Add("Button", "x352 y480 w103 h47", "同步修改obsidian中的图片")
 Button_sync_image_to_obsidian.OnEvent("Click",SyncImages)
 
+myGui.Add("Text", "x24 y544 w131 h23 +0x200", "在笔记软件中停留的延迟")
+myGui.Add("Text", "x282 y543 w63 h23 +0x200", "单位毫秒ms")
+Edit_delay_note := myGui.Add("Edit", "x161 y544 w120 h21", app_config.DelayNote)
+Edit_delay_note.OnEvent("LoseFocus",(*) => app_config.DelayNote := Edit_delay_note.Value)
 
 myGui.Add("Link", "x440 y552 w51 h17", "<a href=`"https://github.com/livelycode36/obsidian2bookxnotepro`">查看更新</a>")
 myGui.OnEvent('Close', (*) => myGui.Hide())
@@ -78,7 +82,7 @@ myGui.Title := "obsidian2bookxnotepro"
 ; =======托盘菜单=========
 myMenu := A_TrayMenu
 
-myMenu.Add("&Open", (*) => myGui.Show("w498 h574"))
+myMenu.Add("&Open", (*) => myGui.Show("w499 h585"))
 myMenu.Default := "&Open"
 myMenu.ClickCount := 2
 
