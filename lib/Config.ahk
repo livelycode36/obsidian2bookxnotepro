@@ -109,4 +109,13 @@ Class Config{
             UpdateOrIntert("hotkey_bookxnote_hightline",Value)
         }
     }
+
+    DelayNote{
+        get{
+            return GetKey("delay_note")
+        }
+        set{
+            UpdateOrIntert("delay_note",Value)
+        }
+    }
 }

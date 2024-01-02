@@ -42,6 +42,8 @@ InitSqlite() {
   config_data["hotkey_hightline"] := "!h"
   config_data["hotkey_bookxnote_hightline"] := "^h"
 
+  config_data["delay_note"] := "500"
+
   for key, value in config_data {
     if CheckKeyExist(key) {
       continue
