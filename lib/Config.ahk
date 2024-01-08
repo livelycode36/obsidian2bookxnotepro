@@ -38,6 +38,15 @@ Class Config{
         }
     }
     
+    IsRemoveLinebreak{
+        get{
+            return GetKey("is_remove_linebreak")
+        }
+        set{
+            UpdateOrIntert("is_remove_linebreak",Value)
+        }
+    }
+    
     Template{
         get{
             return GetKey("template")

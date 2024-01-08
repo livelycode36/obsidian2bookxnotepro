@@ -32,12 +32,16 @@ CheckBox_is_back := myGui.AddCheckbox("x160 y304 w150 h23", "粘贴之后回到B
 CheckBox_is_back.Value := app_config.IsBack
 CheckBox_is_back.OnEvent("Click", (*) => app_config.IsBack := CheckBox_is_back.Value)
 
-Check_is_markmind_rich := myGui.Add("CheckBox", "x160 y328 w132 h23", "markmind的rich模式")
-Check_is_markmind_rich.Value := app_config.IsMarkmindRich
-Check_is_markmind_rich.OnEvent("Click", (*) => app_config.IsMarkmindRich := Check_is_markmind_rich.Value)
+CheckBox_is_markmind_rich := myGui.Add("CheckBox", "x160 y328 w132 h23", "markmind的rich模式")
+CheckBox_is_markmind_rich.Value := app_config.IsMarkmindRich
+CheckBox_is_markmind_rich.OnEvent("Click", (*) => app_config.IsMarkmindRich := CheckBox_is_markmind_rich.Value)
 
-myGui.Add("Text", "x96 y362 w63 h23", "回链快捷键")
-hk_backlink := myGui.Add("Hotkey", "x160 y362 w155 h21", GetKey("hotkey_backlink"))
+CheckBox_is_remove_linebreak := myGui.Add("CheckBox", "x160 y352 w130 h23", "移除高亮内容的换行")
+CheckBox_is_remove_linebreak.Value := app_config.IsRemoveLinebreak
+CheckBox_is_remove_linebreak.OnEvent("Click", (*) => app_config.IsRemoveLinebreak := CheckBox_is_remove_linebreak.Value)
+
+myGui.Add("Text", "x96 y380 w63 h23", "回链快捷键")
+hk_backlink := myGui.Add("Hotkey", "x160 y380 w155 h21", GetKey("hotkey_backlink"))
 hk_backlink.OnEvent("Change", Update_Hk_Backlink)
 Update_Hk_Backlink(*){
   RefreshHotkey(app_config.HotkeyBacklink,hk_backlink.Value,obsidian2bookxnote)
@@ -45,36 +49,36 @@ Update_Hk_Backlink(*){
 }
 
 
-myGui.Add("Text", "x61 y394 w96 h27", "bookxnote快捷键:复制摘录原文")
-hk_copy_content := myGui.Add("Hotkey", "x160 y394 w156 h21",app_config.HotkeyCopyContent)
+myGui.Add("Text", "x61 y412 w96 h27", "bookxnote快捷键:复制摘录原文")
+hk_copy_content := myGui.Add("Hotkey", "x160 y412 w156 h21",app_config.HotkeyCopyContent)
 hk_copy_content.OnEvent("Change", (*) => app_config.HotkeyCopyContent := hk_copy_content.Value)
 
-myGui.Add("Text", "x61 y426 w96 h29", "bookxnote快捷键:复制外部回链")
-hk_copy_backlink := myGui.Add("Hotkey", "x160 y426 w156 h21", app_config.HotkeyCopyBacklink)
+myGui.Add("Text", "x61 y444 w96 h29", "bookxnote快捷键:复制外部回链")
+hk_copy_backlink := myGui.Add("Hotkey", "x160 y444 w156 h21", app_config.HotkeyCopyBacklink)
 hk_copy_backlink.OnEvent("Change", (*) => app_config.HotkeyCopyBacklink := hk_copy_backlink.Value)
 
 
-myGui.Add("Text", "x64 y474 w93 h23 +0x200", "高亮+回链快捷键")
-hotkey_hightline := myGui.Add("Hotkey", "x160 y474 w156 h21",app_config.HotkeyHightline)
+myGui.Add("Text", "x64 y492 w93 h23 +0x200", "高亮+回链快捷键")
+hotkey_hightline := myGui.Add("Hotkey", "x160 y492 w156 h21",app_config.HotkeyHightline)
 hotkey_hightline.OnEvent("Change", Update_Hk_Hightline)
 Update_Hk_Hightline(*){
   RefreshHotkey(app_config.HotkeyHightline,hotkey_hightline.Value,obsidian2bookxnoteHightline)
   app_config.HotkeyHightline := hotkey_hightline.Value
 }
 
-myGui.Add("Text", "x61 y506 w96 h26", "bookxnote快捷键:设为高亮")
-hotkey_bookxnote_hightline := myGui.Add("Hotkey", "x160 y506 w156 h21",app_config.HotkeyBookxnoteHightline)
+myGui.Add("Text", "x61 y524 w96 h26", "bookxnote快捷键:设为高亮")
+hotkey_bookxnote_hightline := myGui.Add("Hotkey", "x160 y524 w156 h21",app_config.HotkeyBookxnoteHightline)
 hotkey_bookxnote_hightline.OnEvent("Change", (*) => app_config.HotkeyBookxnoteHightline := hotkey_bookxnote_hightline.Value)
 
-Button_sync_image_to_obsidian := myGui.Add("Button", "x352 y480 w103 h47", "同步修改obsidian中的图片")
+Button_sync_image_to_obsidian := myGui.Add("Button", "x352 y498 w103 h47", "同步修改obsidian中的图片")
 Button_sync_image_to_obsidian.OnEvent("Click",SyncImages)
 
-myGui.Add("Text", "x24 y544 w131 h23 +0x200", "在笔记软件中停留的延迟")
-myGui.Add("Text", "x282 y543 w63 h23 +0x200", "单位毫秒ms")
-Edit_delay_note := myGui.Add("Edit", "x161 y544 w120 h21", app_config.DelayNote)
+myGui.Add("Text", "x24 y562 w131 h23 +0x200", "在笔记软件中停留的延迟")
+myGui.Add("Text", "x282 y562 w63 h23 +0x200", "单位毫秒ms")
+Edit_delay_note := myGui.Add("Edit", "x161 y562 w120 h21", app_config.DelayNote)
 Edit_delay_note.OnEvent("LoseFocus",(*) => app_config.DelayNote := Edit_delay_note.Value)
 
-myGui.Add("Link", "x440 y552 w51 h17", "<a href=`"https://github.com/livelycode36/obsidian2bookxnotepro`">查看更新</a>")
+myGui.Add("Link", "x440 y570 w51 h17", "<a href=`"https://github.com/livelycode36/obsidian2bookxnotepro`">查看更新</a>")
 myGui.OnEvent('Close', (*) => myGui.Hide())
 myGui.OnEvent('Escape', (*) => myGui.Hide())
 myGui.Title := "obsidian2bookxnotepro"
@@ -82,7 +86,7 @@ myGui.Title := "obsidian2bookxnotepro"
 ; =======托盘菜单=========
 myMenu := A_TrayMenu
 
-myMenu.Add("&Open", (*) => myGui.Show("w499 h585"))
+myMenu.Add("&Open", (*) => myGui.Show("w500 h594"))
 myMenu.Default := "&Open"
 myMenu.ClickCount := 2
 
