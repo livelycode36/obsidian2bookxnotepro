@@ -104,6 +104,9 @@ GetNoteContent() {
         note_content := GetImagePath(parameter_map["nb"], parameter_map["uuid"])
     } else if (File_Type == "text") {
         note_content := A_Clipboard
+        if (app_config.IsRemoveLinebreak == "1") {
+            note_content := StrReplace(note_content, "`n", "")
+        }
     }
     return note_content
 }

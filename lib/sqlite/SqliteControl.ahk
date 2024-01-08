@@ -24,27 +24,24 @@ InitSqlite() {
   }
 
   ; 初始化插入数据
-  config_data := Map()
-  config_data["bookxnote_note_data_path"] := "C:\Users\你的用户名\Documents\BookxNote Pro"
-  config_data["image_path_in_note"] := "D:\note\images\bookxnote"
+  config_data := {
+    bookxnote_note_data_path: "C:\Users\你的用户名\Documents\BookxNote Pro",
+    image_path_in_note: "D:\note\images\bookxnote",
+    image_template: "图片:{image}[📌]({backlink})`n",
+    template: "笔记:{text}[📌]({backlink})`n",
+    app_name: "Obsidian.exe",
+    is_back: "1",
+    is_markmind_rich: "0",
+    is_remove_linebreak: "1",
+    hotkey_backlink: "!b",
+    hotkey_copy_content: "!c",
+    hotkey_copy_backlink: "^!b",
+    hotkey_hightline: "!h",
+    hotkey_bookxnote_hightline: "^h",
+    delay_note: "500"
+  }
 
-  config_data["image_template"] := "图片:{image}[📌]({backlink})`n"
-  config_data["template"] := "笔记:{text}[📌]({backlink})`n"
-  
-  config_data["app_name"] := "Obsidian.exe"
-  config_data["is_back"] := "1"
-  config_data["is_markmind_rich"] := "0"
-  
-  config_data["hotkey_backlink"] := "!b"
-  config_data["hotkey_copy_content"] := "!c"
-  config_data["hotkey_copy_backlink"] := "^!b"
-  
-  config_data["hotkey_hightline"] := "!h"
-  config_data["hotkey_bookxnote_hightline"] := "^h"
-
-  config_data["delay_note"] := "500"
-
-  for key, value in config_data {
+  for key, value in config_data.OwnProps() {
     if CheckKeyExist(key) {
       continue
     }
