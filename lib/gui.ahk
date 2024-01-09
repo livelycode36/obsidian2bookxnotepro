@@ -1,6 +1,7 @@
 #Requires Autohotkey v2
 #Include sqlite/SqliteControl.ahk
 #Include ../obsidian2bookxnotepro.ahk
+#Include BootUp.ahk
 
 ; 初始化数据
 InitSqlite()
@@ -40,45 +41,49 @@ CheckBox_is_remove_linebreak := myGui.Add("CheckBox", "x160 y352 w130 h23", "移
 CheckBox_is_remove_linebreak.Value := app_config.IsRemoveLinebreak
 CheckBox_is_remove_linebreak.OnEvent("Click", (*) => app_config.IsRemoveLinebreak := CheckBox_is_remove_linebreak.Value)
 
-myGui.Add("Text", "x96 y380 w63 h23", "回链快捷键")
-hk_backlink := myGui.Add("Hotkey", "x160 y380 w155 h21", GetKey("hotkey_backlink"))
+CheckBox_boot_up := myGui.Add("CheckBox", "x160 y376 w120 h26", "开机启动")
+CheckBox_boot_up.Value := get_boot_up()
+CheckBox_boot_up.OnEvent("Click", (*) => adaptive_bootup())
+
+
+myGui.Add("Text", "x96 y408 w63 h23", "回链快捷键")
+hk_backlink := myGui.Add("Hotkey", "x160 y408 w155 h21", GetKey("hotkey_backlink"))
 hk_backlink.OnEvent("Change", Update_Hk_Backlink)
 Update_Hk_Backlink(*){
   RefreshHotkey(app_config.HotkeyBacklink,hk_backlink.Value,obsidian2bookxnote)
   app_config.HotkeyBacklink := hk_backlink.Value
 }
 
-
-myGui.Add("Text", "x61 y412 w96 h27", "bookxnote快捷键:复制摘录原文")
-hk_copy_content := myGui.Add("Hotkey", "x160 y412 w156 h21",app_config.HotkeyCopyContent)
+myGui.Add("Text", "x61 y440 w96 h27", "bookxnote快捷键:复制摘录原文")
+hk_copy_content := myGui.Add("Hotkey", "x160 y440 w156 h21",app_config.HotkeyCopyContent)
 hk_copy_content.OnEvent("Change", (*) => app_config.HotkeyCopyContent := hk_copy_content.Value)
 
-myGui.Add("Text", "x61 y444 w96 h29", "bookxnote快捷键:复制外部回链")
-hk_copy_backlink := myGui.Add("Hotkey", "x160 y444 w156 h21", app_config.HotkeyCopyBacklink)
+myGui.Add("Text", "x61 y472 w96 h29", "bookxnote快捷键:复制外部回链")
+hk_copy_backlink := myGui.Add("Hotkey", "x160 y472 w156 h21", app_config.HotkeyCopyBacklink)
 hk_copy_backlink.OnEvent("Change", (*) => app_config.HotkeyCopyBacklink := hk_copy_backlink.Value)
 
 
-myGui.Add("Text", "x64 y492 w93 h23 +0x200", "高亮+回链快捷键")
-hotkey_hightline := myGui.Add("Hotkey", "x160 y492 w156 h21",app_config.HotkeyHightline)
+myGui.Add("Text", "x64 y520 w93 h23 +0x200", "高亮+回链快捷键")
+hotkey_hightline := myGui.Add("Hotkey", "x160 y520 w156 h21",app_config.HotkeyHightline)
 hotkey_hightline.OnEvent("Change", Update_Hk_Hightline)
 Update_Hk_Hightline(*){
   RefreshHotkey(app_config.HotkeyHightline,hotkey_hightline.Value,obsidian2bookxnoteHightline)
   app_config.HotkeyHightline := hotkey_hightline.Value
 }
 
-myGui.Add("Text", "x61 y524 w96 h26", "bookxnote快捷键:设为高亮")
-hotkey_bookxnote_hightline := myGui.Add("Hotkey", "x160 y524 w156 h21",app_config.HotkeyBookxnoteHightline)
+myGui.Add("Text", "x61 y552 w96 h26", "bookxnote快捷键:设为高亮")
+hotkey_bookxnote_hightline := myGui.Add("Hotkey", "x160 y552 w156 h21",app_config.HotkeyBookxnoteHightline)
 hotkey_bookxnote_hightline.OnEvent("Change", (*) => app_config.HotkeyBookxnoteHightline := hotkey_bookxnote_hightline.Value)
 
-Button_sync_image_to_obsidian := myGui.Add("Button", "x352 y498 w103 h47", "同步修改obsidian中的图片")
+Button_sync_image_to_obsidian := myGui.Add("Button", "x352 y528 w103 h47", "同步修改obsidian中的图片")
 Button_sync_image_to_obsidian.OnEvent("Click",SyncImages)
 
-myGui.Add("Text", "x24 y562 w131 h23 +0x200", "在笔记软件中停留的延迟")
-myGui.Add("Text", "x282 y562 w63 h23 +0x200", "单位毫秒ms")
-Edit_delay_note := myGui.Add("Edit", "x161 y562 w120 h21", app_config.DelayNote)
+myGui.Add("Text", "x24 y592 w131 h23 +0x200", "在笔记软件中停留的延迟")
+myGui.Add("Text", "x282 y592 w63 h23 +0x200", "单位毫秒ms")
+Edit_delay_note := myGui.Add("Edit", "x161 y592 w120 h21", app_config.DelayNote)
 Edit_delay_note.OnEvent("LoseFocus",(*) => app_config.DelayNote := Edit_delay_note.Value)
 
-myGui.Add("Link", "x440 y570 w51 h17", "<a href=`"https://github.com/livelycode36/obsidian2bookxnotepro`">查看更新</a>")
+myGui.Add("Link", "x440 y590 w51 h17", "<a href=`"https://github.com/livelycode36/obsidian2bookxnotepro`">查看更新</a>")
 myGui.OnEvent('Close', (*) => myGui.Hide())
 myGui.OnEvent('Escape', (*) => myGui.Hide())
 myGui.Title := "obsidian2bookxnotepro"
@@ -86,7 +91,7 @@ myGui.Title := "obsidian2bookxnotepro"
 ; =======托盘菜单=========
 myMenu := A_TrayMenu
 
-myMenu.Add("&Open", (*) => myGui.Show("w500 h594"))
+myMenu.Add("&Open", (*) => myGui.Show("w500 h648"))
 myMenu.Default := "&Open"
 myMenu.ClickCount := 2
 
