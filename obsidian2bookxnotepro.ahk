@@ -141,12 +141,12 @@ GetImagePath(book_id, note_uuid) {
     manifest := JSON.Load(FileRead(booknote_config_path, "utf-8"))
     notebooks := manifest["notebooks"]
 
-    AddBook2Boos(notebooks)
-    AddBook2Boos(notebooks) {
+    AddBook2Books(notebooks)
+    AddBook2Books(notebooks) {
         for notebook in notebooks {
             try {
                 if notebook["notebooks"] {
-                    AddBook2Boos(notebook["notebooks"])
+                    AddBook2Books(notebook["notebooks"])
                 } else {
                     books.Push(notebook)
                 }
@@ -163,28 +163,52 @@ GetImagePath(book_id, note_uuid) {
         }
     }
 
+    if !book_name{
+        MsgBox "没有找到书籍"
+        Exit
+    }
+
     book_markups_path := app_config.BookxnoteNoteDataPath "\notebooks\" book_name "\markups.json"
     if !FileExist(book_markups_path) {
         MsgBox book_markups_path "文件不存在"
         Exit
     }
+
     book_markups := JSON.Load(FileRead(book_markups_path, "utf-8"))
-    markups := book_markups["markups"]
-    for markup in markups {
-        if markup["uuid"] == note_uuid {
-            imgfile := markup["imgfile"]
-            ; return markup["imgfile"]
+    
+
+    uuid_imgfile := get_uuid_imgfile_for_markups()
+
+    get_uuid_imgfile_for_markups(){
+        ; 2024的bxn图片配置在json文件的"markups"这里
+        markups := book_markups["markups"]
+        for markup in markups {
+            if markup["uuid"] == note_uuid {
+                return markup["imgfile"]
+            }
+        }
+        ; 2023的bxn图片配置在json文件的"unimportant"这里
+        markups := book_markups["unimportant"]
+        for markup in markups {
+            if markup["uuid"] == note_uuid {
+                return markup["imgfile"]
+            }
         }
     }
 
-    imgfile_path := app_config.BookxnoteNoteDataPath "\notebooks\" book_name "\imgfiles\" imgfile
+    if !uuid_imgfile {
+        MsgBox "没有找到图片"
+        Exit
+    }
+
+    imgfile_path := app_config.BookxnoteNoteDataPath "\notebooks\" book_name "\imgfiles\" uuid_imgfile
 
     if !FileExist(app_config.ImagePathInNote)
         DirCreate(app_config.ImagePathInNote)
 
-    FileCopy imgfile_path, app_config.ImagePathInNote "\" imgfile, 1
+    FileCopy imgfile_path, app_config.ImagePathInNote "\" uuid_imgfile, 1
 
-    return imgfile
+    return uuid_imgfile
 }
 
 RenderTemplate(backlink, note_content) {
@@ -283,6 +307,7 @@ SyncImages(*){
     }
 
     CopyIfNewer(SourcePattern, DestPattern){
+        copy_it := false
         Loop Files, SourcePattern{
             time := FileGetTime(DestPattern)
             time := DateDiff(time, A_LoopFileTimeModified, "Seconds")  ; 从目的时间中减去源文件的时间.
@@ -292,10 +317,13 @@ SyncImages(*){
         if copy_it{
             try{
                 FileCopy SourcePattern, DestPattern, 1   ; 以覆盖形式复制 overwrite=yes
+                MsgBox "图片修改同步完成!"
             }
             catch
                 MsgBox 'Could not copy "' SourcePattern '" to "' DestPattern '"'
+        }else{
+            MsgBox "图片已经是最新状态，无需同步!"
         }
     }
-    MsgBox "图片修改同步完成!"
+    
 }
