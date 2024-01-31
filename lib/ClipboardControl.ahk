@@ -1,7 +1,5 @@
 #Requires AutoHotkey v2.0
 
-File_Type := ""
-
 EnableClipboardWatcher(){
     OnClipboardChange ClipDataType,1
 }
