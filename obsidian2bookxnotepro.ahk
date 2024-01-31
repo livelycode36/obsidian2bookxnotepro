@@ -214,15 +214,21 @@ GetImagePath(book_id, note_uuid) {
 RenderTemplate(backlink, note_content) {
     if InStr(note_content, ".png") {
         template := GetKey("image_template")
-        template := StrReplace(template, "{backlink}", backlink)
         template := StrReplace(template, "{image}", "![[" note_content "]]")
+        template := RenderCommonTemplate(template)
         return template
     } else {
         template := GetKey("template")
-        template := StrReplace(template, "{backlink}", backlink)
-        template := StrReplace(template, "{text}", note_content)
+        template := RenderCommonTemplate(template)
         return template
     }
+}
+
+RenderCommonTemplate(template){
+    result := StrReplace(template, "{backlink}", backlink)
+    result := StrReplace(result, "{page}", ParseUrl(backlink)["page"])
+    result := StrReplace(result, "{text}", note_content)
+    return result
 }
 
 SendLink2Obsidian(markdown_link) {
