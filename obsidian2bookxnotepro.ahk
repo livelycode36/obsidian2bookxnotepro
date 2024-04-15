@@ -22,7 +22,7 @@ main() {
 RegisterHotKey() {
     HotIf CheckCurrentProgram
     Hotkey app_config.HotkeyBacklink " Up", obsidian2bookxnote
-    Hotkey app_config.HotkeyHightline " Up", obsidian2bookxnoteHightline
+    Hotkey app_config.HotkeyHightline " Up", obsidian2bookxnote
 }
 
 RefreshHotkey(old_hotkey,new_hotkey,callback){
@@ -49,12 +49,20 @@ CheckCurrentProgram(*) {
     return false
 }
 
-obsidian2bookxnote(*) {
+obsidian2bookxnote(ThisHotkey) {
     global
     ReleaseCommonUseKeyboard()
     ActivateProgram("BookxNotePro.exe")
+
+    if (ThisHotkey == (app_config.HotkeyHightline " Up")) {
+        Send app_config.HotkeyBookxnoteHightline
+    }
     
     backlink := GetBackLink()
+    if (backlink == "") {
+        Send app_config.HotkeyBookxnoteHightline
+        backlink := GetBackLink()
+    }
     note_content := GetNoteContent()
 
     markdown_link := RenderTemplate(backlink, note_content)
@@ -64,22 +72,6 @@ obsidian2bookxnote(*) {
     if (GetKey("is_back") == 1) {
         ActivateProgram("BookxNotePro.exe")
     }
-}
-
-obsidian2bookxnoteHightline(*) {
-    global
-    ReleaseCommonUseKeyboard()
-    ActivateProgram("BookxNotePro.exe")
-
-    ; 仅此与obsidian2bookxnote方法，不同
-    Send app_config.HotkeyBookxnoteHightline
-
-    backlink := GetBackLink()
-    note_content := GetNoteContent()
-
-    markdown_link := RenderTemplate(backlink, note_content)
-
-    SendLink2Obsidian(markdown_link)
 }
 
 GetBackLink() {
@@ -117,15 +109,6 @@ PressDownHotkey(bookxnote_hotkey) {
     Send bookxnote_hotkey
     ClipWait 1, 0
     result := A_Clipboard
-    ; MyLog "剪切板的值是：" . result
-
-    ; 解决：一旦potplayer左上角出现提示，快捷键不生效的问题
-    if (result == "") {
-        SafeRecursion()
-        ; 无限重试！
-        result := PressDownHotkey(bookxnote_hotkey)
-    }
-    running_count := 0
     return result
 }
 

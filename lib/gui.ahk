@@ -67,7 +67,7 @@ myGui.Add("Text", "x64 y520 w93 h23 +0x200", "高亮+回链快捷键")
 hotkey_hightline := myGui.Add("Hotkey", "x160 y520 w156 h21",app_config.HotkeyHightline)
 hotkey_hightline.OnEvent("Change", Update_Hk_Hightline)
 Update_Hk_Hightline(*){
-  RefreshHotkey(app_config.HotkeyHightline,hotkey_hightline.Value,obsidian2bookxnoteHightline)
+  RefreshHotkey(app_config.HotkeyHightline,hotkey_hightline.Value,obsidian2bookxnote)
   app_config.HotkeyHightline := hotkey_hightline.Value
 }
 
