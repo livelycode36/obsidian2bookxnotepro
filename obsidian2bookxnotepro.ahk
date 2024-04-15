@@ -284,15 +284,17 @@ SyncImages(*){
     iamges_in_note := InitImagesInNote(app_config.ImagePathInNote)
     iamges_in_bookxnote := InitImagesInBookxnote(app_config.BookxnoteNoteDataPath "\notebooks")
 
+    update_note_image_flag := false
     for image_note in iamges_in_note {
         name := GetNameForPath(image_note)
 
         for image_bookxnote in iamges_in_bookxnote {
             if (name == GetNameForPath(image_bookxnote)) {
-                CopyIfNewer(image_bookxnote, image_note)
+                CopyIfNewer(image_bookxnote, image_note, update_note_image_flag)
             }
         }
     }
+    MsgBox "图片修改同步完成!"
 
     InitImagesInNote(images_path_in_note){
         iamges_in_note := Array()
@@ -312,7 +314,7 @@ SyncImages(*){
         return iamges_in_bookxnote
     }
 
-    CopyIfNewer(SourcePattern, DestPattern){
+    CopyIfNewer(SourcePattern, DestPattern, update_note_image_flag){
         copy_it := false
         Loop Files, SourcePattern{
             time := FileGetTime(DestPattern)
@@ -322,14 +324,11 @@ SyncImages(*){
         }
         if copy_it{
             try{
+                update_note_image_flag := true
                 FileCopy SourcePattern, DestPattern, 1   ; 以覆盖形式复制 overwrite=yes
-                MsgBox "图片修改同步完成!"
             }
             catch
                 MsgBox 'Could not copy "' SourcePattern '" to "' DestPattern '"'
-        }else{
-            MsgBox "图片已经是最新状态，无需同步!"
         }
     }
-    
 }
