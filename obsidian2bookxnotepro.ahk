@@ -207,9 +207,15 @@ RenderTemplate(backlink, note_content) {
     }
 }
 
-RenderCommonTemplate(template){
+RenderCommonTemplate(template) {
     result := StrReplace(template, "{backlink}", backlink)
-    result := StrReplace(result, "{page}", ParseUrl(backlink)["page"])
+    
+    keywords_page := "{page}"
+    if (InStr(template, keywords_page)) {
+        bookxnotepro_backURL_map := ParseUrl(backlink)
+        result := StrReplace(result, keywords_page, bookxnotepro_backURL_map["page"])
+    }
+
     result := StrReplace(result, "{text}", note_content)
     return result
 }
